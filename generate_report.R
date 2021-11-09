@@ -93,12 +93,12 @@ rmarkdown::render(
 # Comparison
 rmarkdown::render(
   input = 'comparison_report.Rmd',
-  output_file = 'comparison_report_project_A_vs_C.html',
+  output_file = 'comparison_report_A_vs_C.html',
   params = c(params_default, counts_paper = list(data_paper), counts_project = list(data_project), condition = 'A', control = 'C')
 )
 
 rmarkdown::render(
   input = 'comparison_report.Rmd',
-  output_file = 'comparison_report_project_A_vs_E.html',
+  output_file = 'comparison_report_A_vs_E.html',
   params = c(params_default, counts_paper = list(data_paper), counts_project = list(data_project), condition = 'A', control = 'E')
 )
