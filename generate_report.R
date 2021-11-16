@@ -33,7 +33,7 @@ for (counts_file in counts_files) {
 # Project data
 data_project <- read_tsv('counts.txt', skip = 1)
 
-sample_names <- sub('.+(SRR\\d+)_deduped\\.bam', '\\1', names(data_project)) %>% gsub(pattern = '\\.', replacement = '_')
+sample_names <- sub('.+(SRR\\d+)_(?:deduped|sorted)\\.bam', '\\1', names(data_project)) %>% gsub(pattern = '\\.', replacement = '_')
 
 names(data_project) <- sample_names
 
