@@ -9,11 +9,13 @@ output:
 
 params:
   pval_cutoff: 0.05
+  pval_cutoff_miRNA: 0.1
   lfc_cutoff: 0
   low_counts_cutoff: 10
   meta_data: ''
   counts_paper: ''
   counts_project: ''
+  counts_miRNA: ''
   condition: ''
   control: ''
   conversion_df: ''
@@ -42,8 +44,12 @@ library(pheatmap)
 library(RColorBrewer)
 library(fgsea)
 library(VennDiagram)
+library(multiMiR)
+
+select <- dplyr::select
 
 pval_cutoff <- params$pval_cutoff
+pval_cutoff_miRNA <- params$pval_cutoff_miRNA
 lfc_cutoff <- params$lfc_cutoff
 low_counts_cutoff <- params$low_counts_cutoff
 
@@ -58,14 +64,16 @@ condition <- params$condition
 control <- params$control
 counts_paper <- params$counts_paper
 counts_project <- params$counts_project
+counts_miRNA <- params$counts_miRNA
 
 counts_paper <- data.frame(counts_paper %>% select((meta_data %>% filter(experimental_class_type %in% c(condition, control), `Assay Type` == 'RNA-Seq'))$Run), row.names = counts_paper$Geneid)
 counts_project <- data.frame(counts_project %>% select((meta_data %>% filter(experimental_class_type %in% c(condition, control), `Assay Type` == 'RNA-Seq'))$Run), row.names = counts_project$Geneid)
+counts_miRNA <- data.frame(counts_miRNA %>% select((meta_data %>% filter(experimental_class_type %in% c(condition, control), `Assay Type` == 'miRNA-Seq'))$Run), row.names = counts_miRNA$X1)
 
 colors_default <- c('#00d5dc', '#ff877e')
 
 
-get_DESeqDataSet_obj <- function(cnts, design_formula) {
+get_DESeqDataSet_obj <- function(cnts, design_formula, counts_threshold = low_counts_cutoff) {
   
   col_data <- meta_data %>%
     filter(Run %in% names(cnts)) %>%
@@ -84,7 +92,7 @@ get_DESeqDataSet_obj <- function(cnts, design_formula) {
   print(summary(dds))
   
   # Filter rows with low counts
-  keep <- rowSums(counts(dds)) >= low_counts_cutoff
+  keep <- rowSums(counts(dds)) >= counts_threshold
   dds <- dds[keep, ]
   
   print(summary(dds))
@@ -133,6 +141,7 @@ plot_enrichment_table <- function(gsea_res, rank_vec, genesets_list, n_top = 10)
 
 ```{r, echo = F}
 writeLines(str_c('pval_cutoff: ', pval_cutoff))
+writeLines(str_c('pval_cutoff_miRNA: ', pval_cutoff_miRNA))
 writeLines(str_c('low_counts_cutoff: ', low_counts_cutoff))
 ```
 
@@ -179,9 +188,27 @@ summary(res_project)
 ```
 
 
-# DE genes comparison
+# miRNA DE results
 
-```{r, echo = F}
+```{r, message = F, warning = F}
+# Create DESeqDataSet object
+dds_miRNA <- get_DESeqDataSet_obj(counts_miRNA, ~ experimental_class_type, counts_threshold = 5)
+
+# DE analysis using Wald test
+dds_miRNA <- DESeq(dds_miRNA)
+colData(dds_miRNA)
+
+# Wald test results
+res_miRNA <- results(
+  dds_miRNA,
+  contrast = c('experimental_class_type', condition, control),
+  alpha = pval_cutoff_miRNA,
+  lfcThreshold = lfc_cutoff
+)
+summary(res_miRNA)
+```
+
+```{r, echo = F, message = F, results = 'hide'}
 # Paper data
 res_paper_df <- res_paper %>%
   data.frame() %>% 
@@ -212,7 +239,63 @@ res_project_up_df <- res_project_sig_df %>%
 
 res_project_down_df <- res_project_sig_df %>%
   filter(log2FoldChange < 0)
+
+
+# miRNA data
+res_miRNA_df <- res_miRNA %>%
+  data.frame() %>% 
+  rownames_to_column(var = 'miRNA_name') %>% 
+  as_tibble()
+
+res_miRNA_sig_df <- res_miRNA_df %>%
+  filter(padj < pval_cutoff_miRNA)
+
+res_miRNA_up_df <- res_miRNA_sig_df %>%
+  filter(log2FoldChange > 0)
+
+res_miRNA_down_df <- res_miRNA_sig_df %>%
+  filter(log2FoldChange < 0)
+
+
+# miRNA target genes
+multimir_up_res <- get_multimir(
+  org = 'mmu',
+  mirna = res_miRNA_up_df$miRNA_name,
+  table = 'validated',
+  summary = T
+)
+
+multimir_down_res <- get_multimir(
+  org = 'mmu',
+  mirna = res_miRNA_down_df$miRNA_name,
+  table = 'validated',
+  summary = T
+)
 ```
+
+```{r}
+# Upregulated miRNA
+res_miRNA_up_df$miRNA_name
+
+# Upregulated miRNA that appeared in multimiR DB
+unique(multimir_up_res@data$mature_mirna_id)
+
+# Upregulated miRNA's target genes
+unique(multimir_up_res@data$target_ensembl) %>% length()
+
+
+# Downregulated miRNA
+res_miRNA_down_df$miRNA_name
+
+# Downregulated miRNA that appeared in multimiR DB
+unique(multimir_down_res@data$mature_mirna_id)
+
+# Downregulated miRNA's target genes
+unique(multimir_down_res@data$target_ensembl) %>% length()
+```
+
+
+# DE genes comparison
 
 ```{r}
 # All genes
@@ -231,8 +314,12 @@ grid::grid.draw(
 # DE genes
 grid::grid.draw(
   venn.diagram(
-    list(paper = res_paper_sig_df$ensembl_gene_id, project = res_project_sig_df$ensembl_gene_id),
-    fill = c('#EFF3FF', '#C6DBEF'),
+    list(
+      paper = res_paper_sig_df$ensembl_gene_id,
+      project = res_project_sig_df$ensembl_gene_id,
+      miRNA_targets = c(unique(multimir_up_res@data$target_ensembl), unique(multimir_down_res@data$target_ensembl))
+    ),
+    fill = c('#EFF3FF', '#C6DBEF', '#FFE4E1'),
     filename = NULL
   )
 )
@@ -246,8 +333,12 @@ base::intersect(res_paper_sig_df$ensembl_gene_id, res_project_sig_df$ensembl_gen
 # Upregulated genes
 grid::grid.draw(
   venn.diagram(
-    list(paper = res_paper_up_df$ensembl_gene_id, project = res_project_up_df$ensembl_gene_id),
-    fill = c('#EDF8E9', '#C7E9C0'),
+    list(
+      paper = res_paper_up_df$ensembl_gene_id,
+      project = res_project_up_df$ensembl_gene_id,
+      miRNA_down_targets = unique(multimir_down_res@data$target_ensembl)
+    ),
+    fill = c('#EDF8E9', '#C7E9C0', '#FFE4E1'),
     filename = NULL
   )
 )
@@ -261,8 +352,12 @@ base::intersect(res_paper_up_df$ensembl_gene_id, res_project_up_df$ensembl_gene_
 # Downregulated genes
 grid::grid.draw(
   venn.diagram(
-    list(paper = res_paper_down_df$ensembl_gene_id, project = res_project_down_df$ensembl_gene_id),
-    fill = c('#FEE5D9', '#FCBBA1'),
+    list(
+      paper = res_paper_down_df$ensembl_gene_id,
+      project = res_project_down_df$ensembl_gene_id,
+      miRNA_up_targets = unique(multimir_up_res@data$target_ensembl)
+    ),
+    fill = c('#FEE5D9', '#FCBBA1', '#FFE4E1'),
     filename = NULL
   )
 )

@@ -38,6 +38,10 @@ sample_names <- sub('.+(SRR\\d+)_(?:deduped|sorted)\\.bam', '\\1', names(data_pr
 names(data_project) <- sample_names
 
 
+# miRNA data
+data_miRNA <- read_csv('counts_data_miRNA.csv')
+
+
 # Genesets data
 conversion_df <- readRDS(file.path(genesets_dir, 'mm_gene_conversions.RDS')) %>%
   dplyr::select(-ensembl_transcript_id) %>% unique()
@@ -93,12 +97,12 @@ rmarkdown::render(
 # Comparison
 rmarkdown::render(
   input = 'comparison_report.Rmd',
-  output_file = 'comparison_report_A_vs_C.html',
-  params = c(params_default, counts_paper = list(data_paper), counts_project = list(data_project), condition = 'A', control = 'C')
+  output_file = 'comparison_report_A_vs_C_miRNA.html',
+  params = c(params_default, counts_paper = list(data_paper), counts_project = list(data_project), counts_miRNA = list(data_miRNA), condition = 'A', control = 'C')
 )
 
 rmarkdown::render(
   input = 'comparison_report.Rmd',
-  output_file = 'comparison_report_A_vs_E.html',
-  params = c(params_default, counts_paper = list(data_paper), counts_project = list(data_project), condition = 'A', control = 'E')
+  output_file = 'comparison_report_A_vs_E_miRNA.html',
+  params = c(params_default, counts_paper = list(data_paper), counts_project = list(data_project), counts_miRNA = list(data_miRNA), condition = 'A', control = 'E')
 )
