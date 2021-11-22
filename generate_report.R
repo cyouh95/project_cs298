@@ -39,7 +39,7 @@ names(data_project) <- sample_names
 
 
 # miRNA data
-data_miRNA <- read_csv('counts_data_miRNA.csv')
+data_miRNA <- read_csv('cerium_counts.csv')
 
 
 # Genesets data

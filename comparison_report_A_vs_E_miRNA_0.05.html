@@ -347,20 +347,20 @@ summary(res_project)</code></pre>
 dds_miRNA &lt;- get_DESeqDataSet_obj(counts_miRNA, ~ experimental_class_type, counts_threshold = 5)</code></pre>
 <pre><code>## [1] TRUE
 ## [1] TRUE
-## [1] &quot;DESeqDataSet object of length 752 with 0 metadata columns&quot;
-## [1] &quot;DESeqDataSet object of length 457 with 0 metadata columns&quot;</code></pre>
+## [1] &quot;DESeqDataSet object of length 762 with 0 metadata columns&quot;
+## [1] &quot;DESeqDataSet object of length 460 with 0 metadata columns&quot;</code></pre>
 <pre class="r"><code># DE analysis using Wald test
 dds_miRNA &lt;- DESeq(dds_miRNA)
 colData(dds_miRNA)</code></pre>
 <pre><code>## DataFrame with 6 rows and 4 columns
 ##             experimental_class_type                   regime         treatment        sizeFactor
 ##                            &lt;factor&gt;                 &lt;factor&gt;       &lt;character&gt;         &lt;numeric&gt;
-## SRR13535277                       A in space without gravity without nanoceria 0.858790689060425
-## SRR13535279                       A in space without gravity without nanoceria  6.22396633462984
-## SRR13535281                       A in space without gravity without nanoceria 0.954639314885199
-## SRR13535301                       E                  on land without nanoceria   1.7386882546087
-## SRR13535303                       E                  on land without nanoceria 0.357840871660787
-## SRR13535305                       E                  on land without nanoceria 0.478007833504392</code></pre>
+## SRR13535277                       A in space without gravity without nanoceria 0.861809840519925
+## SRR13535279                       A in space without gravity without nanoceria  6.23648675210719
+## SRR13535281                       A in space without gravity without nanoceria 0.973057316741363
+## SRR13535301                       E                  on land without nanoceria  1.71084525464979
+## SRR13535303                       E                  on land without nanoceria 0.341721670345891
+## SRR13535305                       E                  on land without nanoceria 0.487497196845065</code></pre>
 <pre class="r"><code># Wald test results
 res_miRNA &lt;- results(
   dds_miRNA,
@@ -370,11 +370,11 @@ res_miRNA &lt;- results(
 )
 summary(res_miRNA)</code></pre>
 <pre><code>## 
-## out of 457 with nonzero total read count
+## out of 460 with nonzero total read count
 ## adjusted p-value &lt; 0.05
-## LFC &gt; 0 (up)       : 2, 0.44%
+## LFC &gt; 0 (up)       : 2, 0.43%
 ## LFC &lt; 0 (down)     : 1, 0.22%
-## outliers [1]       : 6, 1.3%
+## outliers [1]       : 5, 1.1%
 ## low counts [2]     : 0, 0%
 ## (mean count &lt; 0)
 ## [1] see &#39;cooksCutoff&#39; argument of ?results
