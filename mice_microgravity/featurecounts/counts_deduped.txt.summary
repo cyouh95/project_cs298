@@ -1,0 +1,12 @@
+Status	/home/chan/mice_microgravity/outputs_primary/picard/SRR13535276_deduped.bam	/home/chan/mice_microgravity/outputs_primary/picard/SRR13535278_deduped.bam	/home/chan/mice_microgravity/outputs_primary/picard/SRR13535280_deduped.bam	/home/chan/mice_microgravity/outputs_primary/picard/SRR13535288_deduped.bam	/home/chan/mice_microgravity/outputs_primary/picard/SRR13535290_deduped.bam	/home/chan/mice_microgravity/outputs_primary/picard/SRR13535292_deduped.bam	/home/chan/mice_microgravity/outputs_primary/picard/SRR13535300_deduped.bam	/home/chan/mice_microgravity/outputs_primary/picard/SRR13535302_deduped.bam	/home/chan/mice_microgravity/outputs_primary/picard/SRR13535304_deduped.bam
+Assigned	3107284	2321609	3701956	7929174	6330905	3686532	2491487	1580539	1861995
+Unassigned_Ambiguity	153112	120346	172732	346463	280481	174520	139277	89160	121390
+Unassigned_MultiMapping	5513096	8830166	6572056	7235303	7837917	4840258	11584672	9318555	3082439
+Unassigned_NoFeatures	1099670	618690	1118038	2446762	1812290	1229161	456261	481287	550404
+Unassigned_Unmapped	0	0	0	0	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0	0	0	0	0
+Unassigned_Secondary	0	0	0	0	0	0	0	0	0
+Unassigned_Nonjunction	0	0	0	0	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0	0	0	0	0

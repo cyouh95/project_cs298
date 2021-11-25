@@ -1,0 +1,36 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Sun Nov 21 13:11:17 2021]
+rule trimmomatic_trim:
+    input: /home/chan/mice_microgravity/data/SRR13535292_1.fastq.gz, /home/chan/mice_microgravity/data/SRR13535292_2.fastq.gz
+    output: /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_1_paired.fastq.gz, /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_1_unpaired.fastq.gz, /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_2_paired.fastq.gz, /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_2_unpaired.fastq.gz
+    jobid: 0
+    wildcards: sample=SRR13535292
+    priority: 2
+    resources: mem_mb=9661, disk_mb=9661, tmpdir=/tmp
+
+
+        which trimmomatic
+        trimmomatic -version 
+        trimmomatic PE -phred33 /home/chan/mice_microgravity/data/SRR13535292_1.fastq.gz /home/chan/mice_microgravity/data/SRR13535292_2.fastq.gz /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_1_paired.fastq.gz /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_1_unpaired.fastq.gz /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_2_paired.fastq.gz /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_2_unpaired.fastq.gz SLIDINGWINDOW:4:20 ILLUMINACLIP:/home/chan/mice_microgravity/adapters/NexteraPE-PE-adapters.fa:2:30:10:2:TRUE MINLEN:20
+        
+Activating conda environment: /home/chan/mice_microgravity/.snakemake/conda/e1e1e36cb33b4dacef6066399aedacf0
+/home/chan/mice_microgravity/.snakemake/conda/e1e1e36cb33b4dacef6066399aedacf0/bin/trimmomatic
+0.36
+TrimmomaticPE: Started with arguments:
+ -phred33 /home/chan/mice_microgravity/data/SRR13535292_1.fastq.gz /home/chan/mice_microgravity/data/SRR13535292_2.fastq.gz /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_1_paired.fastq.gz /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_1_unpaired.fastq.gz /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_2_paired.fastq.gz /home/chan/mice_microgravity/outputs_primary/trimmomatic/SRR13535292_2_unpaired.fastq.gz SLIDINGWINDOW:4:20 ILLUMINACLIP:/home/chan/mice_microgravity/adapters/NexteraPE-PE-adapters.fa:2:30:10:2:TRUE MINLEN:20
+Using PrefixPair: 'AGATGTGTATAAGAGACAG' and 'AGATGTGTATAAGAGACAG'
+Using Long Clipping Sequence: 'GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG'
+Using Long Clipping Sequence: 'TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG'
+Using Long Clipping Sequence: 'CTGTCTCTTATACACATCTCCGAGCCCACGAGAC'
+Using Long Clipping Sequence: 'CTGTCTCTTATACACATCTGACGCTGCCGACGA'
+ILLUMINACLIP: Using 1 prefix pairs, 4 forward/reverse sequences, 0 forward only sequences, 0 reverse only sequences
+Input Read Pairs: 35230474 Both Surviving: 33424656 (94.87%) Forward Only Surviving: 1646212 (4.67%) Reverse Only Surviving: 79207 (0.22%) Dropped: 80399 (0.23%)
+TrimmomaticPE: Completed successfully
+[Sun Nov 21 13:52:21 2021]
+Finished job 0.
+1 of 1 steps (100%) done

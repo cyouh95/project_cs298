@@ -1,0 +1,12 @@
+Status	/home/chan/diabetes_mellitus/outputs/picard/SRR15202006_deduped.bam	/home/chan/diabetes_mellitus/outputs/picard/SRR15202007_deduped.bam	/home/chan/diabetes_mellitus/outputs/picard/SRR15202008_deduped.bam	/home/chan/diabetes_mellitus/outputs/picard/SRR15202009_deduped.bam	/home/chan/diabetes_mellitus/outputs/picard/SRR15202010_deduped.bam	/home/chan/diabetes_mellitus/outputs/picard/SRR15202011_deduped.bam
+Assigned	12633373	11169811	11283591	10889859	11241553	8610959
+Unassigned_Ambiguity	126058	110334	113015	108297	109762	83549
+Unassigned_MultiMapping	3735603	3512749	3898382	3420991	3461804	3801585
+Unassigned_NoFeatures	1045472	1028447	1066432	975494	1042449	1105281
+Unassigned_Unmapped	0	0	0	0	0	0
+Unassigned_MappingQuality	0	0	0	0	0	0
+Unassigned_FragmentLength	0	0	0	0	0	0
+Unassigned_Chimera	0	0	0	0	0	0
+Unassigned_Secondary	0	0	0	0	0	0
+Unassigned_Nonjunction	0	0	0	0	0	0
+Unassigned_Duplicate	0	0	0	0	0	0
