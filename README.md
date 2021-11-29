@@ -1,6 +1,7 @@
 # project_cs298
 
 **mRNA data**: `outputs_primary` (both)
+
 **miRNA data**: `cerium_counts.csv`, `cornea_counts.csv`
 
 - **Paper data (Paper #1)**
